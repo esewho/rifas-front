@@ -3,9 +3,9 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom"
 import Home from "../pages/Home"
 import Raffles from "../pages/Raffles"
 
-import Footer from "../pages/Footer"
-import NavBar from "../pages/NavBar"
-import RaffleDetail from "../components/RaffleDetail"
+import Footer from "../components/Footer"
+import NavBar from "../components/NavBar"
+import RaffleDetail from "../pages/RaffleDetail"
 
 export default function RoutesApp() {
 	return (

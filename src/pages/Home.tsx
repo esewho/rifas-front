@@ -1,10 +1,10 @@
 import { motion } from "framer-motion"
 
 import { Shield, CheckCircle, Award } from "lucide-react"
-import Navbar from "./NavBar"
+import Navbar from "../components/NavBar"
 import Hero from "../components/Hero"
 import Raffles from "./Raffles"
-import Footer from "./Footer"
+import Footer from "../components/Footer"
 
 const steps = [
 	{
