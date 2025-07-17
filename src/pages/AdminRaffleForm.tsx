@@ -1,11 +1,10 @@
 
-import type React from "react"
-
 import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Upload, X, Calendar, Ticket, DollarSign, Trophy, Save, ArrowLeft } from "lucide-react"
 import { Button } from "../components/ui/Button"
 import { Input } from "../components/ui/Input"
+import { createRaffleService } from "../lib/raffle-organizer"
 
 export default function AdminRaffleForm() {
   const [formData, setFormData] = useState({
@@ -21,7 +20,9 @@ export default function AdminRaffleForm() {
   const [dragActive, setDragActive] = useState(false)
   const [previewImages, setPreviewImages] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
-
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
 
 
@@ -60,9 +61,36 @@ export default function AdminRaffleForm() {
     setPreviewImages((prev) => prev.filter((_, i) => i !== index))
   }
 
-  const handleSubmit = () => {
-    console.log("Form data:", formData)
-    // Aquí enviarías formData a tu backend
+  const handleSubmit = async() => {
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
+
+    try{
+      const raffleToCreate = {
+        name: formData.name,
+        description: formData.description,
+        startDate: formData.startDate ? new Date(formData.startDate) : new Date(),
+        endDate: new Date(formData.endDate),  
+        maxTickets: parseInt(formData.maxTickets, 10),
+        price: parseFloat(formData.price),
+        images: formData.images.map(({ url, default: isDefault }) => ({
+          url,
+          default: isDefault,
+        })),
+        organizerName: "Admin", 
+        createdAt: new Date(),           
+      }
+      console.log("Raffle created successfully:", raffleToCreate)
+      const createdRaffle = await createRaffleService(raffleToCreate)
+      console.log("Raffle created successfully:", createdRaffle)
+      setSuccess(true)
+    }catch(err){
+      console.error("Error creating raffle:", err)
+      setError("Error al crear la rifa. Por favor, inténtalo de nuevo más tarde.")  
+    }finally {
+      setLoading(false)
+    }
   }
 
   return (
