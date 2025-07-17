@@ -14,7 +14,7 @@ export default function RoutesApp() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/raffles" element={<Raffles />} />
-				<Route path="/raffles/:raffleId" element={<RaffleDetail />} />
+				<Route path="/raffles/:id" element={<RaffleDetail />} />
 				<Route path="/footer" element={<Footer />} />
 				<Route path="/navbar" element={<NavBar />} />
 				<Route path="/raffles/admin" element={<AdminRaffleForm />} />

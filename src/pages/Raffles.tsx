@@ -1,81 +1,24 @@
 import { motion } from "framer-motion"
 import { Ticket, Users, Clock, ShoppingCart } from "lucide-react"
+import { useEffect, useState } from "react";
+import type { Raffle } from "../types/raffle";
+import { getRafflesParticipantsService } from "../lib/raffle-participant";
 
 export default function Raffles() {
-	const raffles = [
-		{
-			id: 1,
-			name: "iPhone 15 Pro Max 256GB",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$12",
-			totalTickets: 2500,
-			remainingTickets: 847,
-			deadline: "15 Feb 2024",
-			category: "Tecnología",
-			featured: true,
-			status: "Activa",
-		},
-		{
-			id: 2,
-			name: "Tesla Model 3 2024",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$25",
-			totalTickets: 5000,
-			remainingTickets: 1234,
-			deadline: "28 Feb 2024",
-			category: "Automóvil",
-			featured: true,
-			status: "Activa",
-		},
-		{
-			id: 3,
-			name: "MacBook Pro M3 Max",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$18",
-			totalTickets: 1800,
-			remainingTickets: 456,
-			deadline: "22 Feb 2024",
-			category: "Tecnología",
-			featured: false,
-			status: "Activa",
-		},
-		{
-			id: 4,
-			name: "Rolex Submariner",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$35",
-			totalTickets: 3000,
-			remainingTickets: 789,
-			deadline: "10 Mar 2024",
-			category: "Lujo",
-			featured: false,
-			status: "Activa",
-		},
-		{
-			id: 5,
-			name: "PlayStation 5 Pro Bundle",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$8",
-			totalTickets: 1200,
-			remainingTickets: 234,
-			deadline: "18 Feb 2024",
-			category: "Gaming",
-			featured: false,
-			status: "Activa",
-		},
-		{
-			id: 6,
-			name: "Vacaciones en Maldivas",
-			image: "/placeholder.svg?height=250&width=350",
-			price: "$22",
-			totalTickets: 2000,
-			remainingTickets: 567,
-			deadline: "05 Mar 2024",
-			category: "Viajes",
-			featured: false,
-			status: "Activa",
-		},
-	]
+	const [raffles, setRaffles] = useState<Raffle[]>();
+
+	useEffect(() => {
+		const fetchRaffles = async () => {
+			try {
+				const data = await getRafflesParticipantsService();
+				setRaffles(data);
+			} catch (error) {
+				console.error("Error fetching raffles:", error);
+			}
+		}
+		fetchRaffles();
+	}, [setRaffles]);	
+	console.log(raffles);	
 	return (
 		<section className="relative z-10 py-20 px-6 bg-white">
 			<div className="max-w-7xl mx-auto">
@@ -94,8 +37,8 @@ export default function Raffles() {
 					</p>
 				</motion.div>
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-					{raffles.map((raffle, index) => (
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 cursor-pointer">
+					{raffles && raffles.map((raffle, index) => (
 						<motion.div
 							key={raffle.id}
 							initial={{ opacity: 0, y: 30 }}
@@ -104,7 +47,7 @@ export default function Raffles() {
 							whileHover={{ y: -5 }}
 							className="group relative"
 						>
-							{raffle.featured && (
+							{(
 								<div className="absolute -top-3 -right-3 z-10">
 									<div className="bg-amber-100 text-amber-700 border border-amber-200 text-sm font-medium px-3 py-1 rounded-md">
 										⭐ Destacado
@@ -115,7 +58,7 @@ export default function Raffles() {
 							<div className="bg-white border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden rounded-xl">
 								<div className="relative">
 									<img
-										src={raffle.image}
+										src="https://preview.redd.it/qjzvsuu8p2d01.jpg?auto=webp&s=7804816a7dfe851615fe797711b4ac4b760db9e9"
 										alt={raffle.name}
 										width={350}
 										height={250}
@@ -147,7 +90,7 @@ export default function Raffles() {
 												Total de boletos:
 											</span>
 											<span className="text-slate-800 font-medium">
-												{raffle.totalTickets.toLocaleString()}
+												{raffle.maxTickets.toLocaleString()}
 											</span>
 										</div>
 
@@ -157,7 +100,7 @@ export default function Raffles() {
 												Disponibles:
 											</span>
 											<span className="text-blue-600 font-medium">
-												{raffle.remainingTickets.toLocaleString()}
+												{raffle.tickets.toLocaleString()}
 											</span>
 										</div>
 
@@ -200,7 +143,7 @@ export default function Raffles() {
 										</div>
 									</div>
 
-									<button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-md flex items-center justify-center transition-all duration-300">
+									<button className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-md flex items-center justify-center transition-all duration-300">
 										<ShoppingCart className="h-4 w-4 mr-2" />
 										Comprar Boletos
 									</button>
