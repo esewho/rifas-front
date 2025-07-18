@@ -26,6 +26,7 @@ export interface Raffle {
   userId: string
   organizerName: string
   createdAt: Date
+  isActive: boolean
 }
 
 export interface RaffleImagesCarouselProps {

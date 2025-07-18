@@ -99,15 +99,7 @@ export default function RaffleDetail() {
               transition={{ duration: 0.6 }}
               className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
             >
-              <div className="relative">
-                <img
-                  src={`http://localhost:3000/${raffleData.images[0].name}`}
-                  alt={raffleData.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-
-              </div>
+              <RaffleImagesCarousel images={raffleData.images} />
 
               <div className="p-6">
                 <h1 className="text-2xl font-bold text-slate-800 mb-3">{raffleData.name}</h1>
