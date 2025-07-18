@@ -14,7 +14,7 @@ export default function AdminRaffleForm() {
     endDate: "",
     maxTickets: "",
     price: "",
-    images: [] as { url: string; default: boolean }[],
+    images: [] as File[],
   })
 
   const [dragActive, setDragActive] = useState(false)
@@ -42,56 +42,62 @@ export default function AdminRaffleForm() {
   }
 
   const addImages = (files: File[]) => {
-    files.forEach((file, index) => {
-      const reader = new FileReader()
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...files],
+    }));
+
+    // Para previsualizar las imágenes
+    files.forEach((file) => {
+      const reader = new FileReader();
       reader.onload = (e) => {
-        const url = e.target?.result as string
-        setPreviewImages((prev) => [...prev, url])
-        setFormData((prev) => ({
-          ...prev,
-          images: [...prev.images, { url, default: index === 0 && prev.images.length === 0 }],
-        }))
-      }
-      reader.readAsDataURL(file)
-    })
-  }
+        const url = e.target?.result as string;
+        setPreviewImages((prev) => [...prev, url]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   const removeImage = (index: number) => {
-    setFormData((prev) => ({ ...prev, images: prev.images.filter((_, i) => i !== index) }))
-    setPreviewImages((prev) => prev.filter((_, i) => i !== index))
-  }
+  setFormData((prev) => ({
+    ...prev,
+    images: prev.images.filter((_, i) => i !== index),
+  }));
+  setPreviewImages((prev) => prev.filter((_, i) => i !== index));
+};
+ const handleSubmit = async () => {
+  setLoading(true)
+  setError(null)
+  setSuccess(false)
 
-  const handleSubmit = async() => {
-    setLoading(true)
-    setError(null)
-    setSuccess(false)
+  try {
+    const formDataToSend = new FormData()
+    formDataToSend.append('name', formData.name)
+    formDataToSend.append('description', formData.description)
+    formDataToSend.append('startDate', formData.startDate)
+    formDataToSend.append('endDate', formData.endDate)
+    formDataToSend.append('maxTickets', formData.maxTickets)
+    formDataToSend.append('price', formData.price)
+    formDataToSend.append('organizerName', "Admin")
+    formDataToSend.append('createdAt', new Date().toISOString())
 
-    try{
-      const raffleToCreate = {
-        name: formData.name,
-        description: formData.description,
-        startDate: formData.startDate ? new Date(formData.startDate) : new Date(),
-        endDate: new Date(formData.endDate),  
-        maxTickets: parseInt(formData.maxTickets, 10),
-        price: parseFloat(formData.price),
-        images: formData.images.map(({ url, default: isDefault }) => ({
-          url,
-          default: isDefault,
-        })),
-        organizerName: "Admin", 
-        createdAt: new Date(),           
-      }
-      console.log("Raffle created successfully:", raffleToCreate)
-      const createdRaffle = await createRaffleService(raffleToCreate)
-      console.log("Raffle created successfully:", createdRaffle)
-      setSuccess(true)
-    }catch(err){
-      console.error("Error creating raffle:", err)
-      setError("Error al crear la rifa. Por favor, inténtalo de nuevo más tarde.")  
-    }finally {
-      setLoading(false)
-    }
+    // Añadir todos los archivos con la clave 'images'
+    formData.images.forEach((file) => {
+      formDataToSend.append('images', file)
+    })
+
+    const createdRaffle = await createRaffleService(formDataToSend)
+
+    console.log("Raffle created successfully:", createdRaffle)
+    setSuccess(true)
+  } catch (err) {
+    console.error("Error creating raffle:", err)
+    setError("Error al crear la rifa. Por favor, inténtalo de nuevo más tarde.")
+  } finally {
+    setLoading(false)
   }
+}
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">

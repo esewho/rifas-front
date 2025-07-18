@@ -1,4 +1,5 @@
 export interface Image {
+  id: string | number;
   url: string
 }
 
@@ -20,9 +21,13 @@ export interface Raffle {
   endDate: Date
   price: number
   maxTickets: number
-  images: Image[]
+  images: File[]
   tickets: Ticket[]
   userId: string
   organizerName: string
   createdAt: Date
+}
+
+export interface RaffleImagesCarouselProps {
+  images: Image[];
 }

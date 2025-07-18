@@ -3,10 +3,11 @@ import { Ticket, Users, Clock, ShoppingCart } from "lucide-react"
 import { useEffect, useState } from "react";
 import type { Raffle } from "../types/raffle";
 import { getRafflesParticipantsService } from "../lib/raffle-participant";
+import { useNavigate } from "react-router-dom";
 
 export default function Raffles() {
 	const [raffles, setRaffles] = useState<Raffle[]>();
-
+	const navigate = useNavigate();
 	useEffect(() => {
 		const fetchRaffles = async () => {
 			try {
@@ -45,6 +46,7 @@ export default function Raffles() {
 							whileInView={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.6, delay: index * 0.1 }}
 							whileHover={{ y: -5 }}
+							 onClick={() => navigate(`/raffles/${raffle.id}`)}
 							className="group relative"
 						>
 							{(
@@ -58,7 +60,7 @@ export default function Raffles() {
 							<div className="bg-white border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden rounded-xl">
 								<div className="relative">
 									<img
-										src="https://preview.redd.it/qjzvsuu8p2d01.jpg?auto=webp&s=7804816a7dfe851615fe797711b4ac4b760db9e9"
+										src={"http://localhost:3000" + raffle.images[0].url}
 										alt={raffle.name}
 										width={350}
 										height={250}
@@ -66,9 +68,6 @@ export default function Raffles() {
 									/>
 									<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 
-									<div className="absolute top-4 left-4 bg-white/90 text-slate-700 text-sm font-medium px-3 py-1 rounded-md">
-										{raffle.category}
-									</div>
 
 									<div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg px-3 py-1">
 										<div className="text-lg font-bold text-slate-800">
@@ -110,7 +109,7 @@ export default function Raffles() {
 												Sorteo:
 											</span>
 											<span className="text-slate-800 font-medium">
-												{raffle.deadline}
+												{raffle.endDate instanceof Date ? raffle.endDate.toLocaleDateString() : String(raffle.endDate)}
 											</span>
 										</div>
 

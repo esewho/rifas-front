@@ -8,6 +8,7 @@ import SelectedTicketsSummary from "../components/rafflesComponents/SelectedTick
 import { useParams } from "react-router-dom"
 import { getRaffleParticipantService } from "../lib/raffle-participant"
 import type { Raffle } from "../types/raffle"
+import { RaffleImagesCarousel } from "../components/ui/RaffleImagesCarousel"
 
 export default function RaffleDetail() {
   const { id } = useParams<{ id: string }>()
@@ -100,14 +101,12 @@ export default function RaffleDetail() {
             >
               <div className="relative">
                 <img
-                  src={raffleData.image || "/placeholder.svg"}
+                  src={`http://localhost:3000/${raffleData.images[0].name}`}
                   alt={raffleData.name}
                   className="w-full h-48 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/90 text-slate-700">
-                  {raffleData.category}
-                </span>
+
               </div>
 
               <div className="p-6">
@@ -132,7 +131,7 @@ export default function RaffleDetail() {
 
                 <div className="flex items-center mb-4 text-sm">
                   <Clock className="h-4 w-4 mr-2 text-slate-500" />
-                  <span className="text-slate-600">Finaliza el {raffleData.deadline}</span>
+                  <span className="text-slate-600">Finaliza el {raffleData.endDate instanceof Date ? raffleData.endDate.toLocaleDateString() : String(raffleData.endDate)}</span>
                 </div>
 
                 <p className="text-slate-600 mb-4 text-sm leading-relaxed">{raffleData.description}</p>
@@ -160,18 +159,11 @@ export default function RaffleDetail() {
                 transition={{ duration: 0.6 }}
                 className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
               >
-                <div className="relative">
-                  <img
-                    src={raffleData.image || "/placeholder.svg"}
-                    alt={raffleData.name}
-                    className="w-full h-64 md:h-80 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <span className="absolute top-4 left-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/90 text-slate-700">
-                    {raffleData.category}
-                  </span>
-                </div>
-
+              <div className="relative">
+                <RaffleImagesCarousel images={raffleData.images} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                
+              </div>
                 <div className="p-8">
                   <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Rifa de {raffleData.name}</h1>
 
@@ -183,11 +175,11 @@ export default function RaffleDetail() {
                     </div>
                     <div className="flex items-center">
                       <Users className="h-5 w-5 mr-2 text-slate-500" />
-                      <span>{raffleData.totalTickets} boletos en total</span>
+                      <span>{raffleData.maxTickets} boletos en total</span>
                     </div>
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 mr-2 text-slate-500" />
-                      <span>Finaliza el {raffleData.deadline}</span>
+                      <span>Finaliza el {raffleData.endDate instanceof Date ? raffleData.endDate.toLocaleDateString() : String(raffleData.endDate)}</span>
                     </div>
                   </div>
 
@@ -207,7 +199,7 @@ export default function RaffleDetail() {
                 <TicketLegend />
 
                 <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3 mb-6">
-                  {Array.from({ length: raffleData.totalTickets }, (_, i) => i + 1).map((number) => (
+                  {Array.from({ length: raffleData.maxTickets }, (_, i) => i + 1).map((number) => (
 					<TicketNumber
 						key={number}
 						number={number}
@@ -341,7 +333,7 @@ export default function RaffleDetail() {
                 <TicketLegend />
 
                 <div className="grid grid-cols-5 gap-3 mb-6">
-                  {Array.from({ length: raffleData.totalTickets }, (_, i) => i + 1).map((number) => (
+                  {Array.from({ length: raffleData.maxTickets }, (_, i) => i + 1).map((number) => (
 					<TicketNumber
 					key={number}
 					number={number}
