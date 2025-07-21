@@ -24,6 +24,7 @@ export default function AdminRaffleForm() {
 		maxTickets: "",
 		price: "",
 		images: [] as File[],
+		status: "",
 	})
 
 	const [dragActive, setDragActive] = useState(false)
@@ -85,6 +86,7 @@ export default function AdminRaffleForm() {
 			formDataToSend.append("description", formData.description)
 			formDataToSend.append("startDate", formData.startDate)
 			formDataToSend.append("endDate", formData.endDate)
+			formDataToSend.append("status", formData.status)
 			formDataToSend.append("maxTickets", formData.maxTickets)
 			formDataToSend.append("price", formData.price)
 			formDataToSend.append("organizerName", "Admin")
@@ -206,6 +208,14 @@ export default function AdminRaffleForm() {
 									icon={DollarSign}
 									required
 								/>
+							</div>
+
+							<div>
+								<label htmlFor="">Raffle status</label>
+								<select name="status" id="status">
+									<option value="draft">Borrador</option>
+									<option value="active">Activo</option>
+								</select>
 							</div>
 
 							<div className="grid grid-cols-2 gap-4">

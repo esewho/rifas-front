@@ -18,6 +18,7 @@ import {
 import type { Raffle } from "../types/raffle"
 import { useNavigate } from "react-router-dom"
 import { getRafflesParticipantsService } from "../lib/raffle-participant"
+import { deleteRaffleService } from "../lib/raffle-organizer"
 
 export default function AdminDashboard() {
 	const [searchTerm, setSearchTerm] = useState("")
@@ -65,7 +66,14 @@ export default function AdminDashboard() {
 		}
 	}
 
-	const handleDelete = (id: number) => {
+	const handleDelete = async (id: string) => {
+		try {
+			await deleteRaffleService(id)
+			console.log("Rifa eliminada con éxito")
+		} catch (error) {
+			console.error("Error al eliminar la rifa:", error)
+		}
+
 		console.log("Eliminar rifa:", id)
 		setShowDeleteModal(null)
 		// Aquí iría la lógica de eliminación
