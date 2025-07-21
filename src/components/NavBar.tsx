@@ -1,7 +1,9 @@
 import { motion } from "framer-motion"
 import { Trophy } from "lucide-react"
+import { Button } from "./ui/Button"
 
-export default function Navbar() {
+export default function Navbar({ onAuthOpen }: { onAuthOpen: () => void }) {
+
 	return (
 		<nav className="relative z-10 p-6 bg-white/80 backdrop-blur-sm border-b border-slate-200">
 			<div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -27,12 +29,10 @@ export default function Navbar() {
 					animate={{ opacity: 1, x: 0 }}
 					className="space-x-4"
 				>
-					<button className="text-slate-600 hover:text-blue-600 font-medium">
-						Iniciar Sesión
-					</button>
-					<button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6">
-						Crear Cuenta
-					</button>
+					<Button onClick={onAuthOpen} variant="primary">
+						Iniciar sesión
+					</Button>
+
 				</motion.div>
 			</div>
 		</nav>

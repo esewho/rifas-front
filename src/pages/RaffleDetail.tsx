@@ -5,30 +5,18 @@ import { ArrowLeft, Clock, Users, Ticket, ShoppingCart, CheckCircle, Info, X } f
 import TicketNumber from "../components/rafflesComponents/TicketNumber"
 import TicketLegend from "../components/rafflesComponents/TicketLegend"
 import SelectedTicketsSummary from "../components/rafflesComponents/SelectedTicketSummary"
+import { useParams } from "react-router-dom"
+import { getRaffleParticipantService } from "../lib/raffle-participant"
+import type { Raffle } from "../types/raffle"
+import { RaffleImagesCarousel } from "../components/ui/RaffleImagesCarousel"
 
 export default function RaffleDetail() {
+  const { id } = useParams<{ id: string }>()
   const [selectedTickets, setSelectedTickets] = useState<Set<number>>(new Set())
   const [showMobileModal, setShowMobileModal] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-
-  // Mock data - reemplazar con props
-  const raffleData = {
-    name: "PlayStation 5 Pro Bundle",
-    image: "/placeholder.svg?height=400&width=600",
-    price: 8,
-    totalTickets: 100,
-    deadline: "30 de Julio, 2024",
-    category: "Gaming",
-    description:
-      "PlayStation 5 Pro con 2 controles DualSense, 5 juegos premium y 1 año de PlayStation Plus Premium incluido.",
-    features: [
-      "PlayStation 5 Pro 1TB",
-      "2 Controles DualSense",
-      "5 Juegos Premium",
-      "PlayStation Plus Premium (1 año)",
-      "Auriculares PULSE 3D",
-    ],
-  }
+  const [loading, setLoading] = useState(true)
+  const [raffleData, setRaffleData] = useState<Raffle>()
 
   const soldTickets = new Set([1, 3, 7, 12, 15, 23, 28, 34, 41, 45, 52, 67, 73, 78, 89, 92, 95])
 
@@ -38,6 +26,25 @@ export default function RaffleDetail() {
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
+
+  useEffect(() => {
+    if(!id)
+       return
+
+    setLoading(true)
+    getRaffleParticipantService(id)
+      .then(data => {
+        setRaffleData(data)
+        setLoading(false)
+        console.log("Raffle Data:", data)
+      })
+      .catch(error => {
+        console.error("Error fetching raffle data:", error)
+        setLoading(false)
+      })
+      
+    }, [id])
+
 
   const toggleTicket = (ticketNumber: number) => {
     if (soldTickets.has(ticketNumber)) return
@@ -50,10 +57,14 @@ export default function RaffleDetail() {
     setSelectedTickets(newSelected)
   }
 
-  const totalPrice = selectedTickets.size * raffleData.price
-  const availableTickets = raffleData.totalTickets - soldTickets.size
 
+  if (!raffleData) {
+  return <div>Cargando...</div>
+  } else {
+  const totalPrice = raffleData.price
+  const availableTickets = 5
   return (
+    
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -88,17 +99,7 @@ export default function RaffleDetail() {
               transition={{ duration: 0.6 }}
               className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
             >
-              <div className="relative">
-                <img
-                  src={raffleData.image || "/placeholder.svg"}
-                  alt={raffleData.name}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                <span className="absolute top-3 left-3 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/90 text-slate-700">
-                  {raffleData.category}
-                </span>
-              </div>
+              <RaffleImagesCarousel images={raffleData.images} />
 
               <div className="p-6">
                 <h1 className="text-2xl font-bold text-slate-800 mb-3">{raffleData.name}</h1>
@@ -122,25 +123,12 @@ export default function RaffleDetail() {
 
                 <div className="flex items-center mb-4 text-sm">
                   <Clock className="h-4 w-4 mr-2 text-slate-500" />
-                  <span className="text-slate-600">Finaliza el {raffleData.deadline}</span>
+                  <span className="text-slate-600">Finaliza el {raffleData.endDate instanceof Date ? raffleData.endDate.toLocaleDateString() : String(raffleData.endDate)}</span>
                 </div>
 
                 <p className="text-slate-600 mb-4 text-sm leading-relaxed">{raffleData.description}</p>
 
-                <div className="mb-6">
-                  <h3 className="font-semibold text-slate-800 mb-2 text-sm">Incluye:</h3>
-                  <ul className="space-y-1">
-                    {raffleData.features.slice(0, 3).map((feature, index) => (
-                      <li key={index} className="flex items-center text-slate-600 text-sm">
-                        <CheckCircle className="h-3 w-3 mr-2 text-emerald-600 flex-shrink-0" />
-                        {feature}
-                      </li>
-                    ))}
-                    {raffleData.features.length > 3 && (
-                      <li className="text-slate-500 text-sm">+{raffleData.features.length - 3} más incluidos</li>
-                    )}
-                  </ul>
-                </div>
+                <p className="text-slate-600 mb-4 text-sm leading-relaxed">{raffleData.description}</p>
 
                 <button
                   onClick={() => setShowMobileModal(true)}
@@ -163,18 +151,11 @@ export default function RaffleDetail() {
                 transition={{ duration: 0.6 }}
                 className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
               >
-                <div className="relative">
-                  <img
-                    src={raffleData.image || "/placeholder.svg"}
-                    alt={raffleData.name}
-                    className="w-full h-64 md:h-80 object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-                  <span className="absolute top-4 left-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-white/90 text-slate-700">
-                    {raffleData.category}
-                  </span>
-                </div>
-
+              <div className="relative">
+                <RaffleImagesCarousel images={raffleData.images} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                
+              </div>
                 <div className="p-8">
                   <h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">Rifa de {raffleData.name}</h1>
 
@@ -186,27 +167,15 @@ export default function RaffleDetail() {
                     </div>
                     <div className="flex items-center">
                       <Users className="h-5 w-5 mr-2 text-slate-500" />
-                      <span>{raffleData.totalTickets} boletos en total</span>
+                      <span>{raffleData.maxTickets} boletos en total</span>
                     </div>
                     <div className="flex items-center">
                       <Clock className="h-5 w-5 mr-2 text-slate-500" />
-                      <span>Finaliza el {raffleData.deadline}</span>
+                      <span>Finaliza el {raffleData.endDate instanceof Date ? raffleData.endDate.toLocaleDateString() : String(raffleData.endDate)}</span>
                     </div>
                   </div>
 
                   <p className="text-slate-600 mb-6 leading-relaxed">{raffleData.description}</p>
-
-                  <div>
-                    <h3 className="font-semibold text-slate-800 mb-3">Incluye:</h3>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {raffleData.features.map((feature, index) => (
-                        <li key={index} className="flex items-center text-slate-600">
-                          <CheckCircle className="h-4 w-4 mr-2 text-emerald-600" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
               </motion.div>
 
@@ -222,7 +191,7 @@ export default function RaffleDetail() {
                 <TicketLegend />
 
                 <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3 mb-6">
-                  {Array.from({ length: raffleData.totalTickets }, (_, i) => i + 1).map((number) => (
+                  {Array.from({ length: raffleData.maxTickets }, (_, i) => i + 1).map((number) => (
 					<TicketNumber
 						key={number}
 						number={number}
@@ -356,7 +325,7 @@ export default function RaffleDetail() {
                 <TicketLegend />
 
                 <div className="grid grid-cols-5 gap-3 mb-6">
-                  {Array.from({ length: raffleData.totalTickets }, (_, i) => i + 1).map((number) => (
+                  {Array.from({ length: raffleData.maxTickets }, (_, i) => i + 1).map((number) => (
 					<TicketNumber
 					key={number}
 					number={number}
@@ -419,4 +388,5 @@ export default function RaffleDetail() {
       </AnimatePresence>
     </div>
   )
+}
 }

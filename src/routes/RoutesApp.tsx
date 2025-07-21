@@ -4,9 +4,9 @@ import Home from "../pages/Home"
 import Raffles from "../pages/Raffles"
 
 import Footer from "../components/Footer"
-import NavBar from "../components/NavBar"
 import RaffleDetail from "../pages/RaffleDetail"
 import AdminRaffleForm from "../pages/AdminRaffleForm"
+import AdminDashboard from "../pages/AdminDashboard"
 
 export default function RoutesApp() {
 	return (
@@ -14,10 +14,10 @@ export default function RoutesApp() {
 			<Routes>
 				<Route path="/" element={<Home />} />
 				<Route path="/raffles" element={<Raffles />} />
-				<Route path="/raffles/:raffleId" element={<RaffleDetail />} />
+				<Route path="/raffles/:id" element={<RaffleDetail />} />
 				<Route path="/footer" element={<Footer />} />
-				<Route path="/navbar" element={<NavBar />} />
-				<Route path="/raffles/admin" element={<AdminRaffleForm />} />
+				<Route path="/raffles/admin/create" element={<AdminRaffleForm />} />
+				<Route path="/raffles/admin" element={<AdminDashboard />} />
 			</Routes>
 		</Router>
 	)

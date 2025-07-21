@@ -5,6 +5,8 @@ import Navbar from "../components/NavBar"
 import Hero from "../components/Hero"
 import Raffles from "./Raffles"
 import Footer from "../components/Footer"
+import { useState } from "react"
+import AuthModal from "./Auth"
 
 const steps = [
 	{
@@ -28,6 +30,7 @@ const steps = [
 ]
 
 export default function RaffleLanding() {
+	const [isAuthOpen, setIsAuthOpen] = useState(false);
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
 			{/* Subtle Background Elements */}
@@ -59,7 +62,8 @@ export default function RaffleLanding() {
 			</div>
 
 			{/* Navigation */}
-			<Navbar />
+			<Navbar onAuthOpen={() => setIsAuthOpen(true)} />
+			<AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
 			{/* Hero Section */}
 			<Hero />
 
