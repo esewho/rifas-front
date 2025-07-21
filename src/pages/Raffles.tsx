@@ -200,7 +200,7 @@ export default function Raffles() {
 										</div>
 									</div>
 
-									<button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-md flex items-center justify-center transition-all duration-300">
+									<button className="w-full bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-medium py-2.5 rounded-md flex items-center justify-center transition-all duration-300">
 										<ShoppingCart className="h-4 w-4 mr-2" />
 										Comprar Boletos
 									</button>

@@ -24,13 +24,13 @@ export default function Footer() {
 							confiabilidad. Sorteos verificables y premios garantizados.
 						</p>
 						<div className="flex space-x-4">
-							<button className="text-slate-400 hover:text-white">
+							<button className="text-slate-400 hover:text-white cursor-pointer">
 								Facebook
 							</button>
-							<button className="text-slate-400 hover:text-white">
+							<button className="text-slate-400 hover:text-white cursor-pointer">
 								Instagram
 							</button>
-							<button className="text-slate-400 hover:text-white">
+							<button className="text-slate-400 hover:text-white cursor-pointer">
 								Twitter
 							</button>
 						</div>
@@ -41,25 +41,25 @@ export default function Footer() {
 						<div className="space-y-3">
 							<button
 								onClick={() => navigate("/info")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Cómo Funciona
 							</button>
 							<button
 								onClick={() => navigate("/about")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Términos y Condiciones
 							</button>
 							<button
 								onClick={() => navigate("/privacy")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Política de Privacidad
 							</button>
 							<button
 								onClick={() => navigate("/faq")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Preguntas Frecuentes
 							</button>
@@ -71,25 +71,25 @@ export default function Footer() {
 						<div className="space-y-3">
 							<button
 								onClick={() => navigate("/help")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Centro de Ayuda
 							</button>
 							<button
 								onClick={() => navigate("/contact")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Contacto
 							</button>
 							<button
 								onClick={() => navigate("/support")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Soporte Técnico
 							</button>
 							<button
 								onClick={() => navigate("/report")}
-								className="block text-slate-400 hover:text-white transition-colors"
+								className="block text-slate-400 hover:text-white transition-colors cursor-pointer"
 							>
 								Reportar Problema
 							</button>
