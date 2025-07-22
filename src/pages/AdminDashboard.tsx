@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -29,16 +27,18 @@ export default function AdminDashboard() {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		const fetchRaffles = async () => {
-			try {
-				const data = await getRafflesParticipantsService()
-				setRaffles(data)
-			} catch (error) {
-				console.error("Error fetching raffles:", error)
-			}
+	const fetchRaffles = async () => {
+		try {
+			const data = await getRafflesParticipantsService(
+				filterStatus
+			)
+			setRaffles(data)
+		} catch (error) {
+			console.error("Error fetching raffles:", error)
 		}
-		fetchRaffles()
-	}, [setRaffles])
+	}
+	fetchRaffles()
+}, [filterStatus])
 	console.log(raffles)
 	const getStatusColor = (status: string) => {
 		switch (status) {
@@ -79,14 +79,9 @@ export default function AdminDashboard() {
 		// Aquí iría la lógica de eliminación
 	}
 
-	const filteredRaffles = raffles?.filter((raffle) => {
-		const matchesSearch = raffle.name
-			.toLowerCase()
-			.includes(searchTerm.toLowerCase())
-		const matchesFilter =
-			filterStatus === "all" || raffle.status === filterStatus
-		return matchesSearch && matchesFilter
-	})
+	const filteredRaffles = raffles?.filter((raffle) =>
+	raffle.name.toLowerCase().includes(searchTerm.toLowerCase())
+)
 
 	const totalRaffles = raffles?.length ?? 0
 	const activeRaffles = raffles?.filter((r) => r.isActive).length ?? 0
@@ -157,10 +152,10 @@ export default function AdminDashboard() {
 								onChange={(e) => setFilterStatus(e.target.value)}
 								className="pl-10 pr-8 py-3 border-2 border-slate-200 rounded-xl focus:border-blue-500 focus:outline-none transition-colors bg-white text-slate-800 appearance-none cursor-pointer"
 							>
-								<option value="all">Todas las rifas</option>
+								<option value="">Todas las rifas</option>
+								<option value="draft">Borradores</option>
 								<option value="active">Activas</option>
 								<option value="completed">Completadas</option>
-								<option value="draft">Borradores</option>
 							</select>
 						</div>
 					</div>

@@ -1,13 +1,17 @@
-import type { AxiosResponse } from "axios";
 import httpService from "./http";
-import type { Raffle } from "../context(outdated take for info)/data-context";
+import type { Raffle } from "../types/raffle";
 
-export async function getRafflesParticipantsService() {
-  const response = await httpService.get(`/raffle/participant`) as AxiosResponse
-  return response.data as Raffle[]
+export async function getRafflesParticipantsService(filterStatus: string) {
+  const response = await httpService.get<Raffle[]>("/raffle/participant", {
+    params: {
+      status: filterStatus !== "all" ? filterStatus : undefined,
+    },
+  });
+
+  return response.data;
 }
 
 export async function getRaffleParticipantService(id: string) {
-  const response = await httpService.get(`/raffle/participant/${id}`) as AxiosResponse
+  const response = await httpService.get(`/raffle/participant/${id}`)
   return response.data as Raffle
 }

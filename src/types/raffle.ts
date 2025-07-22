@@ -24,6 +24,7 @@ export interface Raffle {
   images: File[]
   tickets: Ticket[]
   userId: string
+  status: "draft" | "active" | "completed"
   organizerName: string
   createdAt: Date
   isActive: boolean
