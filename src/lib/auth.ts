@@ -35,3 +35,10 @@ export async function registerService(
 export function logout() {
   localStorage.removeItem("raffle_user");
 }
+
+export async function meService(): Promise<AuthResponse> {
+  const response = await httpService.get<AuthResponse>("/auth/me", {
+    withCredentials: true,
+  });
+  return response.data;
+}

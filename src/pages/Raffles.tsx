@@ -11,7 +11,7 @@ export default function Raffles() {
 	useEffect(() => {
 		const fetchRaffles = async () => {
 			try {
-				const data = await getRafflesParticipantsService()
+				const data = await getRafflesParticipantsService("active")
 				setRaffles(data)
 			} catch (error) {
 				console.error("Error fetching raffles:", error)

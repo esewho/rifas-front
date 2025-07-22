@@ -2,6 +2,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Mail, Lock, Eye, EyeOff, Sparkles } from "lucide-react"
 import { loginService, registerService } from "../lib/auth"
+import { useAuth } from "../context/AuthContext"
 
 interface AuthModalProps {
   isOpen: boolean
@@ -19,7 +20,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     password: "",
     confirmPassword: "",
   })
-
+  const { setUser, setToken } = useAuth();
   const updateField = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
@@ -33,8 +34,11 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       if (isLogin) {
         const response = await loginService(formData.email, formData.password)
         if (response.success && response.user && response.accessToken) {
-          // Guardar usuario y token, ejemplo en localStorage
-          onClose()
+          setUser(response.user);
+          setToken(response.accessToken);
+          localStorage.setItem("raffle_user", JSON.stringify(response.user));
+          localStorage.setItem("raffle_token", response.accessToken);
+          onClose();
         } else {
           setError(response.error || "Error desconocido al iniciar sesión")
         }
@@ -49,10 +53,12 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         const role = "admin"
 
         const response = await registerService(formData.email, formData.password, username, role)
-        if (response.success && response.user && response.accessToken) {
-          localStorage.setItem("raffle_user", JSON.stringify(response.user))
-          localStorage.setItem("raffle_token", response.accessToken)
-          onClose()
+       if (response.success && response.user && response.accessToken) {
+          setUser(response.user);
+          setToken(response.accessToken);
+          localStorage.setItem("raffle_user", JSON.stringify(response.user));
+          localStorage.setItem("raffle_token", response.accessToken);
+          onClose();
         } else {
           setError(response.error || "Error desconocido al registrar")
         }
