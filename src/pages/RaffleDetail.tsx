@@ -89,8 +89,8 @@ export default function RaffleDetail() {
 				<header className="relative z-10 p-4 lg:p-6 bg-white/80 backdrop-blur-sm border-b border-slate-200">
 					<div className="max-w-7xl mx-auto flex items-center justify-between">
 						<button
-							onClick={() => navigate}
-							className="inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none px-4 py-2 text-slate-600 hover:text-blue-600 bg-transparent hover:bg-slate-100"
+							onClick={() => navigate("/raffles/admin")}
+							className="inline-flex cursor-pointer items-center justify-center rounded-md font-medium transition-colors focus:outline-none px-4 py-2 text-slate-600 hover:text-blue-600 bg-transparent hover:bg-slate-100"
 						>
 							<ArrowLeft className="h-5 w-5 mr-2" />
 							Volver
@@ -179,10 +179,11 @@ export default function RaffleDetail() {
 									transition={{ duration: 0.6 }}
 									className="bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
 								>
-									<div className="relative">
+									<div className="relative rounded-2xl overflow-hidden aspect-[16/9]">
 										<RaffleImagesCarousel images={raffleData.images} />
 										<div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 									</div>
+
 									<div className="p-8">
 										<h1 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4">
 											Rifa de {raffleData.name}
