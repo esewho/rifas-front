@@ -64,7 +64,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
         }
       }
     } catch (err) {
-      setError("Error en la comunicación con el servidor")
+      setError("Error en la comunicación con el servidor" + err)
     } finally {
       setLoading(false)
     }

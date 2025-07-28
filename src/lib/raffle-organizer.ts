@@ -18,3 +18,20 @@ export async function deleteRaffleService(raffleId: string): Promise<void> {
 		throw new Error("Failed to delete raffle")
 	}
 }
+
+export async function updateRaffleService(
+  raffleId: string,
+  formData: FormData,
+): Promise<Raffle> {
+  const response = await httpService.put<Raffle>(
+    `/raffle-organizer/${raffleId}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      withCredentials: true,
+    },
+  );
+  return response.data;
+}

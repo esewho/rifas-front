@@ -7,6 +7,7 @@ import Footer from "../components/Footer"
 import RaffleDetail from "../pages/RaffleDetail"
 import AdminRaffleForm from "../pages/AdminRaffleForm"
 import AdminDashboard from "../pages/AdminDashboard"
+import AdminRaffleEdit from "../pages/AdminRaffleEdit"
 
 export default function RoutesApp() {
 	return (
@@ -18,6 +19,7 @@ export default function RoutesApp() {
 				<Route path="/footer" element={<Footer />} />
 				<Route path="/raffles/admin/create" element={<AdminRaffleForm />} />
 				<Route path="/raffles/admin" element={<AdminDashboard />} />
+				<Route path="/raffles/admin/edit/:id" element={<AdminRaffleEdit />} />
 			</Routes>
 		</Router>
 	)
