@@ -230,14 +230,12 @@ export default function AdminDashboard() {
 								<div className="relative">
 									<img
 										src={
-											raffle.images?.[0]?.url
-												? "http://localhost:3000" + raffle.images[0].url
-												: "/placeholder.svg"
+											"http://localhost:3000" + raffle.images[0].url ||
+											"/placeholder.svg"
 										}
 										alt={raffle.name}
 										className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
 									/>
-
 									<div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 									<div className="absolute top-3 left-3">
 										<span
@@ -305,18 +303,21 @@ export default function AdminDashboard() {
 									<div className="flex items-center space-x-2">
 										<button
 											onClick={() => navigate(`/raffles/${raffle.id}`)}
-											className="flex-1 bg-slate-100 cursor-pointer hover:bg-slate-200 text-slate-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm"
+											className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm"
 										>
 											<Eye className="h-4 w-4 mr-1" />
 											Ver
 										</button>
-										<button className="flex-1 bg-blue-100 cursor-pointer hover:bg-blue-200 text-blue-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm">
+										<button
+											onClick={() => navigate(`/management/edit/${raffle.id}`)}
+											className="flex-1 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm"
+										>
 											<Edit3 className="h-4 w-4 mr-1" />
 											Editar
 										</button>
 										<button
 											onClick={() => setShowDeleteModal(raffle.id)}
-											className="bg-red-100 cursor-pointer hover:bg-red-200 text-red-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm"
+											className="bg-red-100 hover:bg-red-200 text-red-700 font-medium py-2 px-3 rounded-lg transition-colors inline-flex items-center justify-center text-sm"
 										>
 											<Trash2 className="h-4 w-4" />
 										</button>
@@ -345,15 +346,10 @@ export default function AdminDashboard() {
 								? "Intenta ajustar tus filtros de búsqueda"
 								: "Comienza creando tu primera rifa"}
 						</p>
-						<motion.button
-							whileHover={{ scale: 1.05 }}
-							whileTap={{ scale: 0.95 }}
-							onClick={() => navigate("/raffles/admin/create")}
-							className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 cursor-pointer rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center"
-						>
+						<button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center">
 							<Plus className="h-5 w-5 mr-2" />
-							Crear primera rifa
-						</motion.button>
+							Crear Primera Rifa
+						</button>
 					</motion.div>
 				)}
 			</main>
