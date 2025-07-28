@@ -20,18 +20,18 @@ export async function deleteRaffleService(raffleId: string): Promise<void> {
 }
 
 export async function updateRaffleService(
-  raffleId: string,
-  formData: FormData,
+	raffleId: string,
+	formData: FormData
 ): Promise<Raffle> {
-  const response = await httpService.patch<Raffle>(
-    `/raffle-organizer/${raffleId}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      withCredentials: true,
-    },
-  );
-  return response.data;
+	const response = await httpService.patch<Raffle>(
+		`/raffle-organizer/${raffleId}`,
+		formData,
+		{
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+			withCredentials: true,
+		}
+	)
+	return response.data
 }
