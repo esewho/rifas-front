@@ -114,29 +114,48 @@ export default function AdminRaffleEdit() {
     }))
   }
 
- const handleSubmit = async () => {
+const handleSubmit = async () => {
   setLoading(true)
   setError(null)
   setSuccess(false)
-  console.log("Enviando formData:", formData);
+
   try {
     const formDataToSend = new FormData()
 
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "newImages") {
-        (value as File[]).forEach((file: File) => formDataToSend.append("newImages", file))
-      } else if (key === "existingImages") {
-        const imagesToDelete = (value as any[]).filter((img) => img.toDelete).map((img) => img.id)
-        formDataToSend.append("deleteImages", JSON.stringify(imagesToDelete))
-      } else {
-        formDataToSend.append(key, value as string)
-      }
+    // Solo añadir campos si tienen contenido válido
+    if (formData.name) formDataToSend.append("name", formData.name)
+    if (formData.description) formDataToSend.append("description", formData.description)
+    if (formData.endDate) formDataToSend.append("endDate", formData.endDate)
+
+    if (formData.maxTickets !== "") {
+      formDataToSend.append("maxTickets", String(Number(formData.maxTickets)))
+    }
+
+    if (formData.price !== "") {
+      formDataToSend.append("price", String(Number(formData.price)))
+    }
+
+    if (formData.status) formDataToSend.append("status", formData.status)
+
+    // Imágenes nuevas
+    formData.newImages.forEach((file) => {
+      formDataToSend.append("newImages", file)
     })
+
+    // IDs de imágenes para eliminar
+    const imagesToDelete = formData.existingImages
+      .filter((img) => img.toDelete)
+      .map((img) => img.id)
+
+    if (imagesToDelete.length > 0) {
+      formDataToSend.append("deleteImages", JSON.stringify(imagesToDelete))
+    }
 
     await updateRaffleService(raffleId!, formDataToSend)
 
     setSuccess(true)
   } catch (err) {
+    console.error(err)
     setError("Error al actualizar la rifa.")
   } finally {
     setLoading(false)

@@ -23,7 +23,7 @@ export async function updateRaffleService(
   raffleId: string,
   formData: FormData,
 ): Promise<Raffle> {
-  const response = await httpService.put<Raffle>(
+  const response = await httpService.patch<Raffle>(
     `/raffle-organizer/${raffleId}`,
     formData,
     {
